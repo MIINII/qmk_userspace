@@ -1,4 +1,5 @@
 {
     "userspace_version": "1.0",
-    "build_targets": []
+    "build_targets": [["boardsource/unicorne", "rolanday"]]
 }
+
