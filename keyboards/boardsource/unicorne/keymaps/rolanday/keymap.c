@@ -11,21 +11,16 @@ enum custom_keycodes {
 };
 
 enum combos {
-  THREE_FOUR_DASH,
-  DF_DASH,
-  JK_ESC
+    QW_ESC,
+    DOTCOM_SCLN
 };
 
-const uint16_t PROGMEM three_four_combo[] = {KC_3, KC_4, COMBO_END};
-const uint16_t PROGMEM df_combo[] = {KC_D, KC_F, COMBO_END};
-const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM esc_combo[] = {KC_Q, KC_W, COMBO_END};
+const uint16_t PROGMEM semi_combo[] = {KC_DOT, KC_COMM, COMBO_END};
 
-combo_t key_combos[COMBO_COUNT] = {
-  // Add commonly used dash to home row
-  [DF_DASH]    = COMBO(df_combo, KC_MINS),
-  [THREE_FOUR_DASH]    = COMBO(three_four_combo, KC_MINS),
-  // For Vim, put Escape on the home row
-  [JK_ESC]    = COMBO(jk_combo, KC_ESC),
+combo_t key_combos[] = {
+    [QW_ESC] = COMBO(esc_combo, KC_ESC),
+    [DOTCOM_SCLN] = COMBO(semi_combo, KC_SCLN)
 };
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -33,10 +28,61 @@ combo_t key_combos[COMBO_COUNT] = {
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
 enum custom_layers {
-  _QWERTY,
-  _LOWER,
-  _RAISE,
-  _FUNC,
+    _QWERTY,
+    _LOWER,
+    _RAISE,
+    _FUNC,
+    UPDIR,
+    BRACES,
+    SELLINE,
+    SELWORD,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case UPDIR: // 상위 디렉토리로 이동
+            if (record->event.pressed) {
+                SEND_STRING("../");
+            }
+            return false;
+
+        case BRACES: // 괄호들 만들기
+            if (record->event.pressed) {
+                uint8_t mods = get_mods();
+                uint8_t oneshot_mods = get_oneshot_mods();
+                clear_oneshot_mods(); // Temporarily disable mods.
+                unregister_mods(MOD_MASK_CSAG);
+                if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
+                    SEND_STRING("{}");
+                } else if ((mods | oneshot_mods) & MOD_MASK_CTRL) {
+                    SEND_STRING("<>");
+                } else {
+                    SEND_STRING("[]");
+                }
+                tap_code(KC_LEFT);   // Move cursor between braces.
+                set_mods(mods); // Restore mods.
+            }
+            return false;
+
+        case SELWORD: // 단어 선택
+            if (record->event.pressed) {
+                SEND_STRING(SS_LCTL(SS_TAP(X_RGHT) SS_LSFT(SS_TAP(X_LEFT))));
+                // Mac users, change LCTL to LALT:
+                // SEND_STRING(SS_LALT(SS_TAP(X_RGHT) SS_LSFT(SS_TAP(X_LEFT))));
+            }
+            return false;
+
+        case SELLINE: // 줄 선택
+            if (record->event.pressed) {
+                SEND_STRING(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END))); // home > Shift+end
+                // Mac users, use:
+                // SEND_STRING(SS_LCTL("a" SS_LSFT("e")));
+            }
+            return false;
+
+    }
+
+    return true;
 };
 
 // For _QWERTY layer
@@ -49,49 +95,62 @@ enum custom_layers {
 #define LOW_ENT  LT(_LOWER, KC_ENT)
 #define RSE_BSP  LT(_RAISE, KC_BSPC)
 #define RSE_SPC  LT(_RAISE, KC_SPC)
-#define OSM_SFT  OSM(MOD_LSFT)
 
 
 // For _RAISE layer
 #define CTL_ESC  LCTL_T(KC_ESC)
+
+// Left-hand home row mods
+#define HOME_A LSFT_T(KC_A)
+#define HOME_S LCTL_T(KC_S)
+#define HOME_D LGUI_T(KC_D)
+#define HOME_F LALT_T(KC_F)
+
+// Right-hand home row mods
+#define HOME_J LALT_T(KC_J)
+#define HOME_K RGUI_T(KC_K)
+#define HOME_L RCTL_T(KC_L)
+#define HOME_SCLN RSFT_T(KC_SCLN)
+
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_LSFT,   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                     KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_QUOT ,KC_RSFT ,
+       KC_LGUI,   KC_A,    KC_S,  KC_D,  KC_F,    KC_G,                         KC_H    ,KC_J     ,KC_K   ,KC_L    ,HOME_SCLN,KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_LALT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     KC_N    ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,OSL_FUN ,
+       KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     KC_N    ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,OSL_FUN ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_LGUI, MO(_LOWER), CTL_ENT, KC_SPC, MO(_RAISE), KC_ESC
+                                        KC_LALT, MO(_LOWER), CTL_ENT, KC_SPC, MO(_RAISE), KC_RALT
                                       //`--------------------------'  `--------------------------'
   ),
 
 
   [_LOWER] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, KC_DEL , XXXXXXX, KC_UNDS, KC_PLUS, KC_PGUP,                      XXXXXXX, XXXXXXX, XXXXXXX, KC_BSLS, KC_PIPE,_______ ,
+      KC_GRV, KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_MINS,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_HOME, KC_END , KC_MINS, KC_EQL , KC_PGDN,                      KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, KC_APP ,_______ ,
+      KC_LGUI, KC_1,    KC_2,   KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_LT  , KC_GT  , KC_COPY, KC_PSTE, KC_SCLN,                      KC_MPLY, KC_MPRV, KC_MNXT, KC_VOLD, KC_VOLU,_______ ,
+      KC_LSFT, XXXXXXX , KC_TILD,KC_GRV, KC_LBRC, KC_LCBR,                       KC_RCBR, KC_RBRC, KC_SCLN,KC_COLN,  KC_SLSH, _______ ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          CTL_ESC, KC_TRNS, XXXXXXX,    RAISE  , KC_TRNS, KC_TRNS
+                                          KC_SCLN,  KC_TRNS, LOWER,    KC_TRNS, KC_TRNS, KC_COLON
                                       //`--------------------------'  `--------------------------'
   ),
 
   [_RAISE] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,  KC_DEL,
+      KC_GRV, KC_DEL , XXXXXXX, KC_UNDS, KC_PLUS, KC_PGUP,                      XXXXXXX, KC_HOME, KC_UP, KC_END, KC_PIPE,KC_BSPC ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_1,    KC_2,   KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______ ,
+      KC_LGUI, KC_HOME, KC_END , KC_MINS, KC_EQL , KC_PGDN,                      KC_LEFT, KC_LEFT, KC_DOWN, KC_RGHT, KC_APP ,_______ ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, XXXXXXX , KC_TILD,KC_GRV, KC_LBRC, KC_LCBR,                       KC_RCBR, KC_RBRC, KC_SCLN,KC_COLN,  KC_SLSH, _______ ,
+      KC_LSFT, KC_LT  , KC_GT  , KC_COPY, KC_PSTE, KC_SCLN,                      KC_MPLY, KC_PGUP, KC_DOWN, KC_PGDN, KC_VOLU,_______ ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_SCLN,  KC_TRNS, LOWER,    KC_TRNS, KC_TRNS, KC_COLON
+                                          CTL_ESC, KC_TRNS, XXXXXXX,    RAISE  , KC_TRNS, KC_TRNS
                                       //`--------------------------'  `--------------------------'
-    ),
+  ),
 
   [_FUNC] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.

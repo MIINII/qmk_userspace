@@ -2,6 +2,7 @@
     "userspace_version": "1.0",
     "build_targets": [
         ["boardsource/unicorne", "rolanday"],
+        ["boardsource/unicorne", "mini"],
         ["crkbd/rev1", "rolanday"]
     ]
 }
