@@ -40,7 +40,7 @@ enum custom_layers {
     KC_GAMING,
     KC_LOWER,
     KC_RAISE,
-    KC_ADJUST,
+    KC_FUNC,
     KC_PRVWD,
     KC_NXTWD,
     KC_LSTRT,
@@ -425,26 +425,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 case KC_LOWER:
                     if (record->event.pressed) {
                         layer_on(_LOWER);
-                        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                        update_tri_layer(_LOWER, _RAISE, _FUNC);
                     } else {
                         layer_off(_LOWER);
-                        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                        update_tri_layer(_LOWER, _RAISE, _FUNC);
                     }
                     return false;
                 case KC_RAISE:
                     if (record->event.pressed) {
                         layer_on(_RAISE);
-                        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                        update_tri_layer(_LOWER, _RAISE, _FUNC);
                     } else {
                         layer_off(_RAISE);
-                        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                        update_tri_layer(_LOWER, _RAISE, _FUNC);
                     }
                     return false;
-                case KC_ADJUST:
+                case KC_FUNC:
                     if (record->event.pressed) {
-                        layer_on(_ADJUST);
+                        layer_on(_FUNC);
                     } else {
-                        layer_off(_ADJUST);
+                        layer_off(_FUNC);
                     }
                     return false;
                 case KC_PRVWD:
@@ -606,11 +606,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                             }
                         } else {
                             layer_on(_LOWER);
-                            update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                            update_tri_layer(_LOWER, _RAISE, _FUNC);
                         }
                     } else {
                         layer_off(_LOWER);
-                        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                        update_tri_layer(_LOWER, _RAISE, _FUNC);
                     }
                     return false;
 
