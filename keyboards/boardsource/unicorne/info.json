@@ -55,7 +55,7 @@
             "gradient_up_down": true
         },
         "default": {
-            "animation": "alphas_mods"
+            "animation": "band_sat"
         },
         "max_brightness": 150,
         "split_count": [27, 27],

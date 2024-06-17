@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.ejs": "html",
+        "*.py": "python",
+        "*.css": "css",
+        "*.tsx": "typescriptreact",
+        "guess_os.h": "c",
+        "stdint.h": "c"
+    }
+}

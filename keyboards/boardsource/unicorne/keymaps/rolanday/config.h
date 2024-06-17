@@ -58,6 +58,15 @@ This is the C configuration file for the keymap
 #define ONESHOT_TAP_TOGGLE 3  /* Tapping this number of times holds the key until tapped once again. */
 #define ONESHOT_TIMEOUT 2000  /* Time (in ms) before the one shot key is released */
 
+#define SPLITTHINGHERE true
 #define SPLIT_POINTING_ENABLE
 #define POINTING_DEVICE_RIGHT
-#define POINTING_DEVICE_ROTATION_270
+
+#define ANALOG_JOYSTICK_Y_AXIS_PIN GP26
+#define ANALOG_JOYSTICK_X_AXIS_PIN GP27
+#define POINTING_DEVICE_INVERT_Y
+#define POINTING_DEVICE_INVERT_X
+
+#define POINTING_DEVICE_ROTATION_270	
+
+/* Select hand configuration */
