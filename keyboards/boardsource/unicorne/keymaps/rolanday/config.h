@@ -60,4 +60,4 @@ This is the C configuration file for the keymap
 
 #define SPLIT_POINTING_ENABLE
 #define POINTING_DEVICE_RIGHT
-#define POINTING_DEVICE_ROTATION_180
+#define POINTING_DEVICE_ROTATION_270
