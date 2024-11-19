@@ -26,7 +26,7 @@ This is the C configuration file for the keymap
 //#define TAPPING_FORCE_HOLD
 
 // Customized by markstos
-#define TAPPING_TERM 155
+#define TAPPING_TERM 162
 #define TAPPING_TERM_PER_KEY
 // used for Tapping Term on thumb keys
 #define TAPPING_TERM_THUMB 125
@@ -64,9 +64,11 @@ This is the C configuration file for the keymap
 
 #define ANALOG_JOYSTICK_Y_AXIS_PIN GP26
 #define ANALOG_JOYSTICK_X_AXIS_PIN GP27
+#define ANALOG_JOYSTICK_SPEED_REGULATOR 13
 #define POINTING_DEVICE_INVERT_Y
 #define POINTING_DEVICE_INVERT_X
-
 #define POINTING_DEVICE_ROTATION_270	
 
 /* Select hand configuration */
+#define OS_DETECTION_DEBUG_ENABLE
+#define OS_DETECTION_KEYBOARD_RESET

@@ -27,7 +27,8 @@ combo_t key_combos[] = {
 // entirely and just use numbers.
 enum custom_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
-    _QWERTY,
+    _MAC,
+    _WIN,
     _LOWER,
     _RAISE,
     _FUNC,
@@ -37,18 +38,41 @@ enum custom_layers {
 /*========+
  |KEYCODES|
  +========*/
-enum custom_keycodes { QWERTY = SAFE_RANGE, LOWER, RAISE, FUNC, BACKLIT, UPDIR, BRACES, SELLINE, SELWORD, KC_QWERTY, KC_FUNC, KC_LOWER, KC_RAISE, KC_PRVWD, KC_NXTWD, KC_LSTRT, KC_LEND, KC_DLINE, KC_BSPC_DEL, KC_LAYER };
+enum custom_keycodes {
+    KC_MAC= SAFE_RANGE,
+    KC_WIN,
+    LOWER,
+    RAISE,
+    FUNC,
+    BACKLIT,
+    UPDIR,
+    BRACES,
+    SELLINE,
+    SELWORD,
+    KC_FUNC,
+    KC_LOWER,
+    KC_RAISE,
+    KC_PRVWD,
+    KC_NXTWD,
+    KC_LSTRT,
+    KC_LEND,
+    KC_DLINE,
+    KC_BSPC_DEL,
+    KC_LAYER };
 
-// For _QWERTY layer
+// For _MAC layer
 #define OSM_LCTL OSM(MOD_LCTL)
 #define OSM_AGR  OSM(MOD_RALT)
 #define OSL_FUN  OSL(_FUNC)
-#define GUI_ENT  GUI_T(KC_ENT)
+
+
+
 #define CTL_ENT  LCTL_T(KC_ENT)
 #define LOW_TAB  LT(_LOWER, KC_TAB)
 #define LOW_ENT  LT(_LOWER, KC_ENT)
 #define RSE_BSP  LT(_RAISE, KC_BSPC)
 #define RSE_SPC  LT(_RAISE, KC_SPC)
+#define FUN_ALT  LT(_FUNC, KC_RALT)
 
 
 // For _RAISE layer
@@ -63,7 +87,7 @@ enum custom_keycodes { QWERTY = SAFE_RANGE, LOWER, RAISE, FUNC, BACKLIT, UPDIR, 
 // Right-hand home row mods
 #define HOME_J LALT_T(KC_J)
 #define HOME_K RGUI_T(KC_K)
-#define HOME_L RCTL_T(KC_L)
+#define HOME_L RCTL_T(KC_L) 
 #define HOME_SCLN RSFT_T(KC_SCLN)
 
 /*=======+
@@ -71,11 +95,22 @@ enum custom_keycodes { QWERTY = SAFE_RANGE, LOWER, RAISE, FUNC, BACKLIT, UPDIR, 
  +=======*/
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_QWERTY] = LAYOUT(
+  [_MAC] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_LGUI,   KC_A,    KC_S,  KC_D,  KC_F,    KC_G,                         KC_H    ,KC_J     ,KC_K   ,KC_L    ,HOME_SCLN,KC_QUOT,
+       KC_LGUI,   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                     KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_QUOT,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     KC_N    ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,OSL_FUN ,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                        KC_LALT, MO(_LOWER), CTL_ENT, KC_SPC, MO(_RAISE), FUN_ALT
+                                      //`--------------------------'  `--------------------------'
+  ),
+    [_WIN] = LAYOUT(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_BSPC,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+       KC_LGUI,   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                     KC_H    ,KC_J    ,KC_K    ,KC_L    ,HOME_SCLN,KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     KC_N    ,KC_M    ,KC_COMM ,KC_DOT  ,KC_SLSH ,OSL_FUN ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -86,25 +121,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LOWER] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_GRV, KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, BRACES, KC_MINS,  KC_DEL,
+      KC_GRV,   KC_F1,    KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_BSPC ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LGUI, KC_1,    KC_2,   KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL ,
+      KC_LGUI,   KC_1,    KC_2,    KC_3,     KC_4,    KC_5,                     KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,KC_BSLS  ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX , KC_TILD,KC_GRV, KC_LBRC, KC_LCBR,                       KC_RCBR, KC_RBRC, KC_SCLN,KC_COLN,  KC_SLSH, _______ ,
+      KC_LSFT, KC_CAPS, KC_PSLS, KC_GRV, KC_LBRC, KC_LCBR,                       KC_RCBR, KC_RBRC, KC_MINS,KC_EQL,  KC_SLSH, _______ ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LALT,  KC_TRNS, CTL_ENT,    KC_TRNS, KC_TRNS, KC_COLON
+                                          KC_LALT,  KC_TRNS, CTL_ENT,  KC_SPC, MO(_RAISE), KC_COLON
                                       //`--------------------------'  `--------------------------'
   ),
 
   [_RAISE] = LAYOUT(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_GRV, KC_DEL , XXXXXXX, KC_UNDS, KC_PLUS, KC_PGUP,                      XXXXXXX, KC_HOME,   KC_UP,  KC_END,  KC_PIPE, KC_BSPC,
+      KC_GRV, KC_DEL , XXXXXXX, KC_UNDS, KC_PLUS, KC_PGUP,                      XXXXXXX ,KC_PGUP ,KC_UP   ,KC_PGDN ,KC_BSLS ,KC_BSPC ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LGUI, KC_HOME, KC_END , KC_MINS, KC_EQL , KC_PGDN,                      KC_LEFT, KC_LEFT, KC_DOWN, KC_RGHT, KC_APP ,_______ ,
+      KC_LGUI, KC_HOME, KC_END , KC_MINS, KC_EQL , KC_PGDN,                     KC_HOME ,KC_LEFT ,KC_DOWN ,KC_RGHT ,KC_VOLU  ,_______ ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, KC_LT  , KC_GT  , KC_COPY, KC_PSTE, KC_SCLN,                      KC_MPLY, KC_PGUP, KC_DOWN, KC_PGDN, KC_VOLU,_______ ,
+      KC_LSFT, KC_LT  , KC_GT  , KC_COPY, KC_PSTE, KC_SCLN,                     KC_END  ,KC_MPRV ,KC_MPLY ,KC_MNXT ,KC_VOLD ,_______ ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LALT, KC_TRNS, XXXXXXX,    RAISE  , KC_TRNS, KC_TRNS
+                                          KC_LALT, KC_TRNS, CTL_ENT,    RAISE  , KC_TRNS, KC_TRNS
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -112,11 +147,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______, KC_F1  , KC_F2  , KC_F3   , KC_F4 ,  KC_F5 ,                     KC_F6   , KC_F7  , KC_F8  , KC_F9  , KC_F10 ,_______ ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_F11 , KC_F12 , XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,_______ ,
+      _______, KC_F11 , KC_F12 , XXXXXXX, XXXXXXX, XXXXXXX,                     KC_BTN1 , KC_BTN2, XXXXXXX, XXXXXXX, XXXXXXX,_______ ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX , XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,XXXXXXX ,
+      _______, KC_CAPS, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI,                     KC_WH_U , KC_WH_D, XXXXXXX, XXXXXXX, QK_BOOT,XXXXXXX ,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, FUNC   , XXXXXXX
+                                          XXXXXXX, XXXXXXX, KC_WIN,    KC_MAC, FUNC   , XXXXXXX
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -131,6 +166,37 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+#ifndef OS_DETECTION_ENABLE
+#define OS_DETECTION_ENABLE
+#endif
+
+#ifndef DEFERRED_EXEC_ENABLE
+#define DEFERRED_EXEC_ENABLE
+#endif
+
+
+#if defined(OS_DETECTION_ENABLE) && defined(DEFERRED_EXEC_ENABLE)
+
+bool process_detected_host_os_user(os_variant_t detected_os) {
+    if (is_keyboard_master()) {
+        bool is_mac = (detected_os == OS_MACOS) || (detected_os == OS_IOS);
+        
+        if (keymap_config.swap_lctl_lgui != is_mac) {
+            keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = is_mac;
+            if (is_mac) {
+                set_single_persistent_default_layer(_MAC);
+            } else {
+                set_single_persistent_default_layer(_WIN);
+            }
+            eeconfig_update_keymap(keymap_config.raw);
+        }
+        return true; // 성공적으로 처리되었음을 나타내는 true 반환
+    }
+    return false; // 키보드 마스터가 아닌 경우, false 반환
+}
+
+#endif
 
 /*===========+
  |OLED ENABLE|
@@ -315,7 +381,7 @@ static void print_status_narrow(void) {
     /* Print current mode */
     oled_set_cursor(0, 0);
 
-    if (keymap_config.swap_lctl_lgui) {
+    if (get_highest_layer(default_layer_state) == _WIN) {
         oled_write_raw_P(windows_logo, sizeof(windows_logo));
     } else {
         oled_write_raw_P(mac_logo, sizeof(mac_logo));
@@ -324,11 +390,11 @@ static void print_status_narrow(void) {
     oled_set_cursor(0, 3);
 
     switch (get_highest_layer(default_layer_state)) {
-        case _QWERTY:
-            oled_write("QWRTY", false);
+        case _MAC:
+            oled_write("MAC", false);
             break;
         default:
-            oled_write("UNDEF", false);
+            oled_write("WIN", false);
     }
 
     oled_set_cursor(0, 5);
@@ -339,8 +405,12 @@ static void print_status_narrow(void) {
     oled_set_cursor(0, 6);
 
     switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
+        case _MAC:
             oled_write("Base ", false);
+            break;
+        case _WIN:
+            oled_write("Base ", false);
+
             break;
         case _RAISE:
             oled_write("Raise", false);
@@ -388,6 +458,7 @@ bool oled_task_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+
         case UPDIR: // 상위 디렉토리로 이동
             if (record->event.pressed) {
                 SEND_STRING("../");
@@ -428,9 +499,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
-        case KC_QWERTY:
+        case KC_MAC:
             if (record->event.pressed) {
-                set_single_persistent_default_layer(_QWERTY);
+                // set_single_persistent_default_layer(_MAC);
+                // register_code16(CG_LNRM); // tap_code에서 tap_code16으로 변경ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+            }
+            return false;
+        case KC_WIN:
+            if (record->event.pressed) {
+                // set_single_persistent_default_layer(_WIN);
+                // register_code16(CG_LSWP); // tap_code에서 tap_code16으로 변경
             }
             return false;
         case KC_FUNC:
@@ -601,16 +679,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
-            /* LAYER */
-
+        /* LAYER */
         case KC_LAYER:
             if (record->event.pressed) {
                 if (shift_held) {
                     if (record->event.pressed) {
-                        if (get_highest_layer(default_layer_state) == _QWERTY) {
+                        if (get_highest_layer(default_layer_state) == _MAC) {
                             set_single_persistent_default_layer(_FUNC);
                         } else if (get_highest_layer(default_layer_state) == _FUNC) {
-                            set_single_persistent_default_layer(_QWERTY);
+                            set_single_persistent_default_layer(_MAC);
                         }
                     }
                 } else {
